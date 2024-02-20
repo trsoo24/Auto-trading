@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  mysql:
+    image: mysql:8.0.36
+    environment:
+      MYSQL_ROOT_HOST: host
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: database
+      TZ: 'Asia/Seoul'
+    ports:
+      - "13306:3306"
+
+  myapp:
+    build: .
+    depends_on:
+      - mysql
+    ports:
+      - "18080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/database?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 1234
