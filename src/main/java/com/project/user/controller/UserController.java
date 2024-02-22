@@ -1,5 +1,6 @@
 package com.project.user.controller;
 
+import com.project.user.entity.User;
 import com.project.user.entity.dto.SignInDto;
 import com.project.user.entity.dto.SignUpDto;
 import com.project.user.service.UserService;

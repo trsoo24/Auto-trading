@@ -2,7 +2,6 @@ package com.project.user.service;
 
 import com.project.exception.CustomException;
 import com.project.user.entity.User;
-import com.project.user.entity.dto.SignInDto;
 import com.project.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,19 +25,19 @@ public class CheckReference {
     }
 
     public void checkDuplicateByEmail(String email) {
-        userRepository.findByEmail(email)
-            .orElseThrow(() -> new CustomException(DUPLICATED_EMAIL));
+        if (userRepository.existsByEmail(email)) {
+            throw new CustomException(DUPLICATED_EMAIL);
+        }
     }
 
     public void checkDuplicateByNickname(String nickname) {
-        userRepository.findByNickname(nickname)
-                .orElseThrow(() -> new CustomException(DUPLICATED_NICKNAME));
+        if (userRepository.existsByNickname(nickname)) {
+            throw new CustomException(DUPLICATED_NICKNAME);
+        }
     }
 
-    public void checkPassword(SignInDto dto) {
-        User user = findUserByEmail(dto.getEmail());
-
-        if (!user.getPassword().equals(passwordEncoder.encode(dto.getPassword()))) {
+    public void checkPassword(User user, String password) {
+        if (!user.getPassword().equals(passwordEncoder.encode(password))) {
             throw new CustomException(UNMATCHED_PASSWORD);
         }
     }
