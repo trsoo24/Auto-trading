@@ -51,9 +51,9 @@ tasks.named('bootBuildImage') {
 	builder = 'paketobuildpacks/builder-jammy-base:latest'
 }
 
-tasks.named('test') {
-	outputs.dir snippetsDir
+test {
 	useJUnitPlatform()
+	outputs.dir snippetsDir
 }
 
 tasks.named('asciidoctor') {
