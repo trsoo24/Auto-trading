@@ -11,13 +11,21 @@ services:
     ports:
       - "13306:3306"
 
-  myapp:
-    build: .
-    depends_on:
-      - mysql
+  redis:
+    image: redis:latest
+    container_name: redis
+    hostname: host
     ports:
-      - "18080:8080"
+      - "6379:6379"
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - 27017:27017
+    volumes:
+      - ./mongodb:/data/db
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/database?useSSL=false&allowPublicKeyRetrieval=true
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: 1234
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=1234
+      - MONGO_INITDB_DATABASE=database
