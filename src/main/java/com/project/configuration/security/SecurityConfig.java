@@ -27,7 +27,7 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .sessionManagement((sessionManagement) -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-                        .requestMatchers("/", "/login").permitAll()
+                        .requestMatchers("/", "/login", "/coin/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("Admin")
                         .anyRequest().authenticated())
 //                .addFilterBefore()
