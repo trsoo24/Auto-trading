@@ -18,7 +18,7 @@ public class JwtToken {
     private final Long accessTokenExpirationPeriod = 1000L * 60 * 60 * 6;
     private final Long refreshTokenExpirationPeriod = 1000L * 60 * 60 * 24 * 2;
     private final String bearer = "Bearer ";
-    private final String accessHeader = "Authorization";
+    private final String accessHeader = "ProofValid";
     private final String refreshHeader = "Refresh";
 
     public String generateAccessToken (String email) { // accessToken 생성

@@ -1,11 +1,10 @@
 package com.project.coin.service;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.project.coin.entity.Coin;
-import com.project.coin.repository.CoinRepository;
+import com.project.coin.entity.Market;
+import com.project.coin.repository.MarketRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +17,7 @@ import java.net.URL;
 @Service
 @RequiredArgsConstructor
 public class UpbitFindCoin {
-    private final CoinRepository coinRepository;
+    private final MarketRepository marketRepository;
 
     public void addCoin () {
         /**
@@ -51,14 +50,14 @@ public class UpbitFindCoin {
                 String market = jsonObject.getAsJsonObject().get("market").getAsString();
                 String kor_name = jsonObject.getAsJsonObject().get("korean_name").getAsString();
                 String eng_name = jsonObject.getAsJsonObject().get("english_name").getAsString();
-                if (market.startsWith("KRW") && !coinRepository.existsByMarket(market)) { // 원화 코인만 DB 에 등록
-                    Coin coin = Coin.builder()
+                if (market.startsWith("KRW") && !marketRepository.existsByMarket(market)) { // 원화 코인만 DB 에 등록
+                    Market coin = Market.builder()
                             .market(market)
                             .coinName(kor_name)
                             .coinEngName(eng_name)
                             .build();
                     System.out.println(coin.getCoinName() + " 추가");
-                    coinRepository.save(coin);
+                    marketRepository.save(coin);
                 }
             }
         } catch (IOException e) {

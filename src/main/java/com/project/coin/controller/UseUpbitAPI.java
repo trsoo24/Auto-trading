@@ -13,7 +13,7 @@ public class UseUpbitAPI {
     private final UpbitFindCoin upbitFindCoin;
 
     @GetMapping("/list")
-    public void findCoinList() {
+    public void findCoinList() { // DB에 원화 시장 마켓 추가
         upbitFindCoin.addCoin();
     }
 }

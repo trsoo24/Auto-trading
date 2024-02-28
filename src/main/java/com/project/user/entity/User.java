@@ -1,6 +1,7 @@
 package com.project.user.entity;
 
 import com.project.user.entity.type.Role;
+import com.project.wallet.entity.Wallet;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,4 +23,7 @@ public class User {
     private String nickname;
     @Enumerated(EnumType.STRING)
     private Role role;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "wallet_id", referencedColumnName = "id")
+    private Wallet wallet;
 }
