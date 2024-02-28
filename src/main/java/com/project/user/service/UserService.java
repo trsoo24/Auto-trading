@@ -8,6 +8,7 @@ import com.project.user.entity.dto.SignInDto;
 import com.project.user.entity.dto.SignUpDto;
 import com.project.user.entity.type.Role;
 import com.project.user.repository.UserRepository;
+import com.project.wallet.service.WalletService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ public class UserService {
     private final CheckReference checkReference;
     private final PasswordEncoder passwordEncoder;
     private final JwtToken jwtToken;
+    private final WalletService walletService;
 
     public String signUp (SignUpDto signUpDto) {
         // 이메일 , 닉네임 중복 검사
@@ -34,6 +36,7 @@ public class UserService {
                 .build();
 
         userRepository.save(user);
+        walletService.generateWallet(user);
 
         return user.getEmail() + "님의 회원가입 완료";
     }
