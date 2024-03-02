@@ -1,4 +1,4 @@
-package com.project.coin.entity;
+package com.project.market.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,7 +15,9 @@ public class Market {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false, unique = true)
     private String coinName;
+    @Column(nullable = false, unique = true)
     private String coinEngName;
     @Column(nullable = false, unique = true)
     private String market;

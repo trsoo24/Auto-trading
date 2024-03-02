@@ -1,6 +1,6 @@
-package com.project.coin.repository;
+package com.project.market.repository;
 
-import com.project.coin.entity.Market;
+import com.project.market.entity.Market;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

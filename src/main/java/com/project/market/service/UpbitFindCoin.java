@@ -1,10 +1,10 @@
-package com.project.coin.service;
+package com.project.market.service;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.project.coin.entity.Market;
-import com.project.coin.repository.MarketRepository;
+import com.project.market.entity.Market;
+import com.project.market.repository.MarketRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +18,7 @@ import java.net.URL;
 @RequiredArgsConstructor
 public class UpbitFindCoin {
     private final MarketRepository marketRepository;
+    private static final String findCoinUrl = "https://api.upbit.com/v1/market/all";
 
     public void addCoin () {
         /**
@@ -28,7 +29,7 @@ public class UpbitFindCoin {
          *  }
          */
         try {
-            URL url = new URL("https://api.upbit.com/v1/market/all");
+            URL url = new URL(findCoinUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
             conn.setRequestMethod("GET");
