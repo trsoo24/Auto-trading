@@ -47,4 +47,12 @@ public class JwtToken {
                 .signWith(SignatureAlgorithm.HS256, jwtKey)
                 .compact();
     }
+
+    public String getPayloadSub(String token) { // payload 에 sub : email 값 추출
+        return Jwts.parser()
+                .setSigningKey(jwtKey)
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
+    }
 }
