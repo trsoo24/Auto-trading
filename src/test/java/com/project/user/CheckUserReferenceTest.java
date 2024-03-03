@@ -4,7 +4,7 @@ import com.project.exception.CustomException;
 import com.project.user.entity.User;
 import com.project.user.entity.dto.SignInDto;
 import com.project.user.repository.UserRepository;
-import com.project.user.service.CheckReference;
+import com.project.reference.CheckUserReference;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,9 +19,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
 
-public class CheckReferenceTest {
+public class CheckUserReferenceTest {
     @InjectMocks
-    private CheckReference checkReference;
+    private CheckUserReference checkUserReference;
     @Mock
     private UserRepository userRepository;
     @Mock
@@ -48,7 +48,7 @@ public class CheckReferenceTest {
                 .password(anyString())
                 .build();
 
-        CustomException exception = assertThrows(CustomException.class, () -> checkReference.checkPassword(user, sign.getPassword()));
+        CustomException exception = assertThrows(CustomException.class, () -> checkUserReference.checkPassword(user, sign.getPassword()));
 
         assertEquals(UNMATCHED_PASSWORD, exception.getErrorCode());
     }

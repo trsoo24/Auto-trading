@@ -6,7 +6,7 @@ import com.project.user.entity.User;
 import com.project.user.entity.dto.SignInDto;
 import com.project.user.entity.dto.SignUpDto;
 import com.project.user.repository.UserRepository;
-import com.project.user.service.CheckReference;
+import com.project.reference.CheckUserReference;
 import com.project.user.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -28,7 +28,7 @@ public class UserServiceTest {
     @Mock
     private UserRepository userRepository;
     @Mock
-    private CheckReference checkReference;
+    private CheckUserReference checkUserReference;
     @Mock
     private PasswordEncoder passwordEncoder;
     @Mock
