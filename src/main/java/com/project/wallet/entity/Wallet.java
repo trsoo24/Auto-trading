@@ -24,4 +24,12 @@ public class Wallet {
     @OneToOne(mappedBy = "wallet")
     private User user;
     private double balance; // 잔액 현금
+
+    public void useBalance(double cost) {
+        this.balance -= cost;
+    }
+
+    public void plusBalance(double money) {
+        this.balance += money;
+    }
 }
