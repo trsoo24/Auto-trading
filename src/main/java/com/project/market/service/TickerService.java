@@ -9,6 +9,7 @@ import com.project.market.entity.Market;
 import com.project.market.entity.Ticker;
 import com.project.market.entity.type.Change;
 import com.project.market.repository.MarketRepository;
+import com.project.reference.CheckMarketReference;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,7 @@ import static com.project.exception.ErrorCode.INCORRECT_SEARCH_METHOD;
 @RequiredArgsConstructor
 public class TickerService {
     private final MarketRepository marketRepository;
+    private final CheckMarketReference checkMarketReference;
     private static final String tickerUrl = "https://api.upbit.com/v1/ticker?markets=";
     /** MarketName ex) "KRW-BTC" 으로 검색하는 방법 우선 사용
      * 이후 BTC , 혹은 비트코인 등으로 검색 기능 고도화 필요
@@ -53,13 +55,11 @@ public class TickerService {
             String marketCode = "";
 
             if (marketArray[i].startsWith("KRW")) {
-                Market market = marketRepository.findByMarket(marketArray[i])
-                        .orElseThrow(() -> new CustomException(INCORRECT_SEARCH_METHOD));
+                Market market = checkMarketReference.findByMarketCode(marketArray[i]);
 
                 marketCode = market.getMarket();
             } else {
-                Market market = marketRepository.findByCoinName(marketArray[i])
-                        .orElseThrow(() -> new CustomException(INCORRECT_SEARCH_METHOD));
+                Market market = checkMarketReference.findByCoinName(marketArray[i]);
 
                 marketCode = market.getMarket();
             }
