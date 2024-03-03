@@ -1,8 +1,7 @@
 package com.project.user.service;
 
 import com.project.configuration.security.JwtToken;
-import com.project.exception.CustomException;
-import com.project.exception.ErrorCode;
+import com.project.reference.CheckUserReference;
 import com.project.user.entity.User;
 import com.project.user.entity.dto.SignInDto;
 import com.project.user.entity.dto.SignUpDto;
@@ -18,15 +17,15 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-    private final CheckReference checkReference;
+    private final CheckUserReference checkUserReference;
     private final PasswordEncoder passwordEncoder;
     private final JwtToken jwtToken;
     private final WalletService walletService;
 
     public String signUp (SignUpDto signUpDto) {
         // 이메일 , 닉네임 중복 검사
-        checkReference.checkDuplicateByEmail(signUpDto.getEmail());
-        checkReference.checkDuplicateByNickname(signUpDto.getNickname());
+        checkUserReference.checkDuplicateByEmail(signUpDto.getEmail());
+        checkUserReference.checkDuplicateByNickname(signUpDto.getNickname());
 
         User user = User.builder()
                 .email(signUpDto.getEmail())
@@ -42,9 +41,9 @@ public class UserService {
     }
 
     public String signIn (SignInDto signInDto) {
-        User user = checkReference.findUserByEmail(signInDto.getEmail());
+        User user = checkUserReference.findUserByEmail(signInDto.getEmail());
         // 비밀번호 일치여부 체크
-        checkReference.checkPassword(user, signInDto.getPassword());
+        checkUserReference.checkPassword(user, signInDto.getPassword());
 
         /** TODO
          *  refresh Token redis 저장
