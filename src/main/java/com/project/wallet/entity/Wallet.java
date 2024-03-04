@@ -1,5 +1,6 @@
 package com.project.wallet.entity;
 
+import com.project.portfolio.entity.Portfolio;
 import com.project.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -22,4 +23,5 @@ public class Wallet {
     private List<Portfolio> coinList;
     @OneToOne(mappedBy = "wallet")
     private User user;
+    private double balance; // 잔액 현금
 }
