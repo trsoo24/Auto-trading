@@ -45,9 +45,7 @@ public class UserService {
         // 비밀번호 일치여부 체크
         checkUserReference.checkPassword(user, signInDto.getPassword());
 
-        /** TODO
-         *  refresh Token redis 저장
-         */
+        jwtToken.generateRefreshToken(user.getEmail());
 
         return jwtToken.generateAccessToken(signInDto.getEmail());
     }
