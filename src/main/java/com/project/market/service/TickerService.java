@@ -4,7 +4,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.project.exception.CustomException;
 import com.project.market.entity.Market;
 import com.project.market.entity.Ticker;
 import com.project.market.entity.type.Change;
@@ -24,7 +23,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.project.exception.ErrorCode.INCORRECT_SEARCH_METHOD;
 
 @Service
 @RequiredArgsConstructor
@@ -40,7 +38,6 @@ public class TickerService {
     public String parseMarketNameList(String marketNameRaw) {
         // 입력 값을 KRW , Market 이용
         // 이름 구분은 쉼표로 ex) KRW-BTC,KRW-ETH / 비트코인,이더리움
-
 
         String[] marketArray;
         if (!marketNameRaw.contains(",")) {
