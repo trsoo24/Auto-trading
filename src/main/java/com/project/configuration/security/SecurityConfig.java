@@ -9,11 +9,15 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+    private final UserDetailsServiceImpl userDetailsService;
+    private final JwtToken jwtToken;
+
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -27,11 +31,10 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .sessionManagement((sessionManagement) -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-                        .requestMatchers("/", "/login", "/coin/**", "/ticker").permitAll()
+                        .requestMatchers("/user/join", "/user/login", "/coin/**", "/ticker").permitAll()
                         .requestMatchers("/admin/**").hasRole("Admin")
                         .anyRequest().authenticated())
-//                .addFilterBefore()
-//                .addFilterAfter()
+                .addFilterBefore(new CustomFilter(userDetailsService, jwtToken), UsernamePasswordAuthenticationFilter.class)
 
                 ;
         return http.build();
