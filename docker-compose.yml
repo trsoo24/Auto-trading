@@ -3,6 +3,13 @@ version: '3'
 services:
   mysql:
     image: mysql:8.0.36
+    container_name: mysql
+    volumes:
+      - ./db/mysql/data:/var/lib/mysql
+      - ./db/mysql/init:/docker-entrypoint-initdb.d
+    command:
+      - '--character-set-server=utf8mb4'
+      - '--collation-server=utf8mb4_unicode_ci'
     environment:
       MYSQL_ROOT_HOST: host
       MYSQL_ROOT_PASSWORD: 1234
@@ -29,3 +36,14 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=1234
       - MONGO_INITDB_DATABASE=database
+
+  springbootapp:
+    build: .
+    container_name: springbootapp
+
+    ports:
+      - 8080:8080
+    depends_on:
+      - mysql
+      - redis
+      - mongodb

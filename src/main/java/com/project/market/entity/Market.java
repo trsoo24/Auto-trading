@@ -21,4 +21,14 @@ public class Market {
     private String coinEngName;
     @Column(nullable = false, unique = true)
     private String market;
+    private double buyFee; // 매수 수수료
+    private double sellFee; // 매도 수수료
+
+    public void setBuyFee (double val) {
+        this.buyFee = val;
+    }
+
+    public void setSellFee (double val) {
+        this.sellFee = val;
+    }
 }

@@ -36,3 +36,9 @@ application.properties
 
 ### VS Code ###
 .vscode/
+
+### MySQL ###
+db/
+
+### MONGODB ###
+mongodb/

@@ -3,12 +3,11 @@ package com.project.portfolio.entity;
 import com.project.user.entity.User;
 import com.project.wallet.entity.Wallet;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Getter
@@ -31,4 +30,21 @@ public class Portfolio {
     private double averageValue; // 매수 평균가
     private double volume; // 개수
     private LocalDateTime lastTradeTimeStamp; // 마지막 거래 시각 (yyyy-MM-dd HH:mm:ss)
+
+    public void patchPrice (double value) {
+        this.price = value;
+    }
+    public void patchVolume (double value) {
+        this.volume = value;
+    }
+    public void patchAverageValue (double price, double volume) {
+        this.averageValue = price / volume;
+    }
+
+    @PrePersist
+    public void timeStamp() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd E HH:mm");
+        this.lastTradeTimeStamp = LocalDateTime
+                .parse(LocalDateTime.now(ZoneId.of("Asia/Seoul")).format(formatter));
+    }
 }
