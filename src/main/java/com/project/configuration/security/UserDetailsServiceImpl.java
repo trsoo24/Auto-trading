@@ -1,21 +1,25 @@
 package com.project.configuration.security;
 
-import com.project.reference.CheckUserReference;
+import com.project.exception.CustomException;
 import com.project.user.entity.User;
+import com.project.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import static com.project.exception.ErrorCode.USER_NOT_FOUND;
+
 @Service
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
-    private final CheckUserReference checkUserReference;
+    private final UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = checkUserReference.findUserByEmail(username);
+        User user = userRepository.findByEmail(username)
+                .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
 
         return new UserDetailImpl(user, user.getEmail(), user.getPassword());
     }

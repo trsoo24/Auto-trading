@@ -1,3 +1,6 @@
-FROM gradle:8.5-jdk17
-WORKDIR /app
-COPY . /app
+FROM openjdk:17-jdk
+
+ARG JAR_FILE=build/libs/*.jar
+COPY ${JAR_FILE} springbootapp.jar
+
+ENTRYPOINT ["java", "-Dspring.profiles.active=prod", "-jar", "/springbootapp.jar"]

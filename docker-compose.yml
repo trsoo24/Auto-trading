@@ -2,18 +2,15 @@ version: '3'
 
 services:
   mysql:
-    image: mysql:8.0.36
+    image: mysql:8.0.33
     container_name: mysql
-    volumes:
-      - ./db/mysql/data:/var/lib/mysql
-      - ./db/mysql/init:/docker-entrypoint-initdb.d
     command:
       - '--character-set-server=utf8mb4'
       - '--collation-server=utf8mb4_unicode_ci'
     environment:
-      MYSQL_ROOT_HOST: host
+      MYSQL_ROOT_HOST: root
       MYSQL_ROOT_PASSWORD: 1234
-      MYSQL_DATABASE: database
+      MYSQL_DATABASE: invest
       TZ: 'Asia/Seoul'
     ports:
       - "13306:3306"
@@ -43,6 +40,12 @@ services:
 
     ports:
       - 8080:8080
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://43.203.104.162:13306/invest?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Asia/Seoul
+      SPRING_DATASOURCE_USERNAME: dbuser
+      SPRING_DATASOURCE_PASSWORD: 1234
+      SPRING_REDIS_PORT: 6379
+
     depends_on:
       - mysql
       - redis
