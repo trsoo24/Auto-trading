@@ -1,5 +1,6 @@
 package com.project.user;
 
+import com.project.configuration.security.JwtToken;
 import com.project.exception.CustomException;
 import com.project.user.entity.User;
 import com.project.user.entity.dto.SignInDto;
@@ -26,6 +27,8 @@ public class CheckUserReferenceTest {
     private UserRepository userRepository;
     @Mock
     private PasswordEncoder passwordEncoder;
+    @Mock
+    private JwtToken jwtToken;
 
     @BeforeEach
     void setUp() {
