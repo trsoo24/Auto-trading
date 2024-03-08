@@ -8,16 +8,19 @@ import com.project.user.entity.dto.SignUpDto;
 import com.project.user.repository.UserRepository;
 import com.project.reference.CheckUserReference;
 import com.project.user.service.UserService;
+import com.project.wallet.service.WalletService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.stubbing.OngoingStubbing;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
+import static java.util.Optional.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
@@ -31,6 +34,8 @@ public class UserServiceTest {
     private CheckUserReference checkUserReference;
     @Mock
     private PasswordEncoder passwordEncoder;
+    @Mock
+    private WalletService walletService;
     @Mock
     private JwtToken jwtToken;
 
@@ -73,7 +78,7 @@ public class UserServiceTest {
                 .password(passwordEncoder.encode("password1"))
                 .build();
 
-        when(userRepository.findByEmail(sign.getEmail())).thenReturn(Optional.of(user));
+        when(checkUserReference.findUserByEmail(sign.getEmail())).thenReturn(user);
         when(jwtToken.generateAccessToken(user.getEmail())).thenReturn("token");
 
         String token = userService.signIn(sign);
