@@ -15,8 +15,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final UserDetailsServiceImpl userDetailsService;
-    private final JwtToken jwtToken;
+    private final CustomFilter customFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -29,7 +28,7 @@ public class SecurityConfig {
                         .requestMatchers("/user/join", "/user/login", "/coin/**", "/ticker").permitAll()
                         .requestMatchers("/admin/**").hasRole("Admin")
                         .anyRequest().authenticated())
-                .addFilterBefore(new CustomFilter(userDetailsService, jwtToken), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class)
 
                 ;
         return http.build();
