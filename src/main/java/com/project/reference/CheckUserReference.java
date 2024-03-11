@@ -49,6 +49,6 @@ public class CheckUserReference {
 
     public String checkUserReference(HttpServletRequest request) {
         String token = request.getHeader("Authorization").replace("Bearer ", "");
-        return jwtToken.getPayloadSub(token);
+        return jwtToken.getPayloadEmail(token);
     }
 }
