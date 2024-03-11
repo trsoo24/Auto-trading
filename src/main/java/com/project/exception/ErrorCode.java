@@ -13,6 +13,7 @@ public enum ErrorCode {
     DUPLICATED_NICKNAME(HttpStatus.BAD_REQUEST, "중복된 닉네임입니다."),
     UNMATCHED_PASSWORD(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
     LOGIN_FAIL(HttpStatus.BAD_REQUEST, "로그인에 실패했습니다."),
+    INVALID_TOKEN(HttpStatus.BAD_REQUEST, "유효하지 않은 토큰입니다"),
 
     // WebSocket
     WEBSOCKET_CLOSED(HttpStatus.BAD_REQUEST, "서버가 닫혀있습니다."),

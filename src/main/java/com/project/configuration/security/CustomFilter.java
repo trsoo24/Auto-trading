@@ -6,6 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,6 +16,7 @@ import java.io.IOException;
 
 import static com.project.exception.ErrorCode.LOGIN_FAIL;
 
+@Configuration
 @RequiredArgsConstructor
 public class CustomFilter extends OncePerRequestFilter {
     private final UserDetailsServiceImpl userDetailsService;
@@ -25,7 +27,7 @@ public class CustomFilter extends OncePerRequestFilter {
         String accessToken = jwtToken.getAccessTokenFromRequest(request);
 
         if (accessToken != null && jwtToken.isValidToken(accessToken)) {
-            String email = jwtToken.getPayloadSub(accessToken);
+            String email = jwtToken.getPayloadEmail(accessToken);
             Authentication authentication = getAuthentication(email);
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
