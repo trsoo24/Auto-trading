@@ -7,13 +7,13 @@ import com.project.exception.CustomException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
 import static com.project.exception.ErrorCode.INVALID_TOKEN;
 
-@Component
+@Service
 @RequiredArgsConstructor
 public class JwtToken {
     @Value("${jwt.secret.key}")
