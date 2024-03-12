@@ -42,7 +42,7 @@ public class CheckUserReference {
     }
 
     public void checkPassword(User user, String password) {
-        if (!user.getPassword().equals(passwordEncoder.encode(password))) {
+        if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new CustomException(UNMATCHED_PASSWORD);
         }
     }
