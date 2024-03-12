@@ -2,51 +2,56 @@ version: '3'
 
 services:
   mysql:
-    image: mysql:8.0.33
+    image: mysql:8.0.36
     container_name: mysql
-    command:
-      - '--character-set-server=utf8mb4'
-      - '--collation-server=utf8mb4_unicode_ci'
     environment:
-      MYSQL_ROOT_HOST: root
       MYSQL_ROOT_PASSWORD: 1234
       MYSQL_DATABASE: invest
       TZ: 'Asia/Seoul'
     ports:
       - "13306:3306"
+    networks:
+      - invest_net
+    volumes:
+      - ./etc/my.cnf:/etc/mysql/my.cnf
 
   redis:
     image: redis:latest
     container_name: redis
     hostname: host
     ports:
-      - "6379:6379"
+      - 6379:6379
+    networks:
+      - invest_net
 
   mongodb:
     image: mongo:latest
     container_name: mongodb
     ports:
       - 27017:27017
-    volumes:
-      - ./mongodb:/data/db
     environment:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=1234
       - MONGO_INITDB_DATABASE=database
+    networks:
+      - invest_net
 
   springbootapp:
     build: .
     container_name: springbootapp
-
     ports:
-      - 8080:8080
+      - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://43.203.104.162:13306/invest?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Asia/Seoul
+      SPRING_DATASOURCE_URL: jdbc:mysql://localhost:13306/invest?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Asia/Seoul
       SPRING_DATASOURCE_USERNAME: dbuser
       SPRING_DATASOURCE_PASSWORD: 1234
       SPRING_REDIS_PORT: 6379
-
+    networks:
+      - invest_net
     depends_on:
       - mysql
       - redis
       - mongodb
+
+networks:
+  invest_net:
