@@ -19,7 +19,7 @@ public class TickerController {
     private final TickerService tickerService;
 
     @GetMapping
-    public ResponseEntity<List<Ticker>> searchMarketTicker(@RequestParam @Valid String marketNameList) {
+    public ResponseEntity<List<Ticker>> searchMarketTicker(@RequestParam("marketNameList") @Valid String marketNameList) {
         return ResponseEntity.ok(tickerService.searchCoinTicker(marketNameList));
     }
 }
