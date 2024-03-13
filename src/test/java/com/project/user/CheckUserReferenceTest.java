@@ -48,7 +48,7 @@ public class CheckUserReferenceTest {
         User user = User.builder()
                 .id(1L)
                 .email("email@naver.com")
-                .password(anyString())
+                .password(passwordEncoder.encode("password2"))
                 .build();
 
         CustomException exception = assertThrows(CustomException.class, () -> checkUserReference.checkPassword(user, sign.getPassword()));
