@@ -2,18 +2,19 @@ package com.project.configuration.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.project.configuration.RedisService;
+import com.project.configuration.redis.RefreshToken;
+import com.project.configuration.redis.RefreshTokenRepository;
 import com.project.exception.CustomException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
 import static com.project.exception.ErrorCode.INVALID_TOKEN;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class JwtToken {
     @Value("${jwt.secret.key}")
@@ -26,7 +27,7 @@ public class JwtToken {
     private final String ACCESS_HEADER = "Authorization";
     private final String REFRESH_HEADER = "Refresh";
     private final String EMAIL = "email";
-    private final RedisService redisService;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     public String generateAccessToken(String email) { // accessToken 생성
         Date date = new Date();
@@ -47,7 +48,11 @@ public class JwtToken {
                 .withClaim(EMAIL, email)
                 .sign(Algorithm.HMAC256(jwtKey));
 
-        redisService.setDataExpire(email, token, REFRESH_TOKEN_EXPIRATION_PERIOD);
+        refreshTokenRepository.save(RefreshToken.builder()
+                .email(email)
+                .refreshToken(token)
+                .expiration(REFRESH_TOKEN_EXPIRATION_PERIOD)
+                .build());
     }
 
     public String getPayloadEmail(String token) {

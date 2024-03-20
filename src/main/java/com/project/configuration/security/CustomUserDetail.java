@@ -2,6 +2,7 @@ package com.project.configuration.security;
 
 import com.project.user.entity.User;
 import com.project.user.entity.type.Role;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -10,10 +11,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 
+@Getter
 @RequiredArgsConstructor
-public class UserDetailImpl implements UserDetails {
+public class CustomUserDetail implements UserDetails {
     private final User user;
-    private final String userEmail;
+    private final String username;
     private final String password;
 
     @Override
@@ -30,10 +32,6 @@ public class UserDetailImpl implements UserDetails {
     }
 
 
-    public User getUser() {
-        return this.user;
-    }
-
     @Override
     public String getPassword() {
         return this.password;
@@ -41,7 +39,7 @@ public class UserDetailImpl implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.userEmail;
+        return this.username;
     }
 
     @Override

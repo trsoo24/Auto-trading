@@ -49,5 +49,4 @@ public class UserService {
 
         return jwtToken.generateAccessToken(signInDto.getEmail());
     }
-
 }
