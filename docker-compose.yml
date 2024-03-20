@@ -4,23 +4,33 @@ services:
   mysql:
     image: mysql:8.0.36
     container_name: mysql
+    restart: always
     environment:
+      MYSQL_USER: dbuser
+      MYSQL_PASSWORD: 1234
+      MYSQL_ROOT_HOST: '%'
       MYSQL_ROOT_PASSWORD: 1234
       MYSQL_DATABASE: invest
-      TZ: 'Asia/Seoul'
+      TZ: Asia/Seoul
     ports:
-      - "13306:3306"
+      - "3306:3306"
     networks:
       - invest_net
     volumes:
-      - ./etc/my.cnf:/etc/mysql/my.cnf
+#      - /etc/my.cnf:/etc/mysql/my.cnf
+      - mysql_data:/var/lib/mysql
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --bind-address=0.0.0.0
+
 
   redis:
     image: redis:latest
     container_name: redis
     hostname: host
     ports:
-      - 6379:6379
+      - "6379:6379"
     networks:
       - invest_net
 
@@ -28,24 +38,30 @@ services:
     image: mongo:latest
     container_name: mongodb
     ports:
-      - 27017:27017
+      - "27017:27017"
     environment:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=1234
       - MONGO_INITDB_DATABASE=database
     networks:
       - invest_net
+    volumes:
+      - mongodb_data:/data/db
 
   springbootapp:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: springbootapp
     ports:
       - "8080:8080"
+    restart: always
+    env_file:
+      - .env
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://localhost:13306/invest?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Asia/Seoul
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/invest?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
       SPRING_DATASOURCE_USERNAME: dbuser
       SPRING_DATASOURCE_PASSWORD: 1234
-      SPRING_REDIS_PORT: 6379
     networks:
       - invest_net
     depends_on:
@@ -55,3 +71,8 @@ services:
 
 networks:
   invest_net:
+    driver: bridge
+
+volumes:
+  mysql_data:
+  mongodb_data:
