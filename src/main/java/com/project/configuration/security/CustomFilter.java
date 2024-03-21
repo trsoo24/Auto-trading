@@ -25,7 +25,12 @@ public class CustomFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if (request.getRequestURI().contains("/join") || request.getRequestURI().contains("/login")) {
+        if (request.getRequestURI().contains("/join") || request.getRequestURI().contains("/login")) { // 회원가입 로그인 제외
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        if (request.getRequestURI().contains("/coin") || request.getRequestURI().contains("/ticker")) { // 마켓 검색 제외
             filterChain.doFilter(request, response);
             return;
         }
