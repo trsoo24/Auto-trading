@@ -1,5 +1,6 @@
 package com.project.configuration.security;
 
+import com.project.configuration.redis.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -7,7 +8,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -15,7 +15,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final CustomFilter customFilter;
+    private final CustomUserDetailsService customUserDetailsService;
+    private final JwtToken jwtToken;
+    private final RefreshTokenRepository refreshTokenRepository;
+    private final CookieUtil cookieUtil;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -28,9 +31,9 @@ public class SecurityConfig {
                         .requestMatchers("/user/join", "/user/login", "/coin/**", "/ticker").permitAll()
                         .requestMatchers("/admin/**").hasRole("Admin")
                         .anyRequest().authenticated())
-                .addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new CustomFilter(customUserDetailsService, jwtToken, refreshTokenRepository, cookieUtil), UsernamePasswordAuthenticationFilter.class)
+        ;
 
-                ;
         return http.build();
     }
 }

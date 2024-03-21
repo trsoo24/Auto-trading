@@ -13,7 +13,7 @@ import static com.project.exception.ErrorCode.USER_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Override
@@ -21,6 +21,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         User user = userRepository.findByEmail(username)
                 .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
 
-        return new UserDetailImpl(user, user.getEmail(), user.getPassword());
+        return new CustomUserDetail(user, user.getEmail(), user.getPassword());
     }
 }

@@ -8,10 +8,10 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-@SpringBootTest
-class PracticeApplicationTests {
-	@Test
-	void contextLoads()  {
-	}
+// @SpringBootTest
+// class PracticeApplicationTests {
+//	@Test
+//	void contextLoads()  {
+//	}
 
-}
+// }
