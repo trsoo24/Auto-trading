@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.Optional;
 
 import static com.project.exception.ErrorCode.INVALID_TOKEN;
 
@@ -67,13 +68,10 @@ public class JwtToken {
         }
     }
 
-    public String getAccessTokenFromRequest(HttpServletRequest request) { // Request Header 토큰 추출
-        String tokenWithBearer = request.getHeader(ACCESS_HEADER);
-
-        if (tokenWithBearer.startsWith(BEARER)) {
-            return tokenWithBearer.substring(BEARER.length());
-        }
-        return null;
+    public Optional<String> getAccessTokenFromRequest(HttpServletRequest request) { // Request Header 토큰 추출
+        return Optional.ofNullable(request.getHeader(ACCESS_HEADER))
+                .filter(refreshToken -> refreshToken.startsWith(BEARER))
+                .map(refreshToken -> refreshToken.replace(BEARER, ""));
     }
 
     public boolean isValidToken(String token) {

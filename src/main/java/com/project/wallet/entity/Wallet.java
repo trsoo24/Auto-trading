@@ -1,5 +1,6 @@
 package com.project.wallet.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.portfolio.entity.Portfolio;
 import com.project.user.entity.User;
 import jakarta.persistence.*;
@@ -21,7 +22,8 @@ public class Wallet {
     private Long id;
     @OneToMany(mappedBy = "wallet")
     private List<Portfolio> coinList;
-    @OneToOne(mappedBy = "wallet")
+    @JsonIgnore
+    @OneToOne(mappedBy = "wallet", fetch = FetchType.LAZY, orphanRemoval = true)
     private User user;
     private double balance; // 잔액 현금
 

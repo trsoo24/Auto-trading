@@ -22,7 +22,7 @@ public class UserService {
     private final JwtToken jwtToken;
     private final WalletService walletService;
 
-    public String signUp (SignUpDto signUpDto) {
+    public User signUp (SignUpDto signUpDto) {
         // 이메일 , 닉네임 중복 검사
         checkUserReference.checkDuplicateByEmail(signUpDto.getEmail());
         checkUserReference.checkDuplicateByNickname(signUpDto.getNickname());
@@ -35,9 +35,9 @@ public class UserService {
                 .build();
 
         userRepository.save(user);
-        walletService.generateWallet(user);
+        setWalletForNewUser(user);
 
-        return user.getEmail() + "님의 회원가입 완료";
+        return user;
     }
 
     public String signIn (SignInDto signInDto) {
@@ -48,5 +48,10 @@ public class UserService {
         jwtToken.generateRefreshToken(user.getEmail());
 
         return jwtToken.generateAccessToken(signInDto.getEmail());
+    }
+
+    public void setWalletForNewUser(User user) {
+        user.setWallet(walletService.generateWallet(user));
+        userRepository.save(user);
     }
 }

@@ -7,16 +7,20 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
 import static com.project.exception.ErrorCode.LOGIN_FAIL;
 
+@Component
 @RequiredArgsConstructor
+@Slf4j
 public class CustomFilter extends OncePerRequestFilter {
     private final CustomUserDetailsService customUserDetailsService;
     private final JwtToken jwtToken;
@@ -25,25 +29,32 @@ public class CustomFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if (request.getRequestURI().contains("/join") || request.getRequestURI().contains("/login")) { // 회원가입 로그인 제외
+        if (request.getRequestURI().equals("/user/join") || request.getRequestURI().equals("/user/login")) { // 회원가입 로그인 제외
+            log.info("회원가입 & 로그인 API로 필터링 제외");
             filterChain.doFilter(request, response);
             return;
         }
 
-        if (request.getRequestURI().contains("/coin") || request.getRequestURI().contains("/ticker")) { // 마켓 검색 제외
+        if (request.getRequestURI().equals("/coin/list") || request.getRequestURI().equals("/coin/fee")) { // 마켓 검색 제외
+            log.info("업비트 코인 마켓 조회 API로 필터링 제외");
             filterChain.doFilter(request, response);
             return;
         }
 
-        String accessToken = jwtToken.getAccessTokenFromRequest(request);
-        String email = jwtToken.getPayloadEmail(accessToken);
+        try {
+            log.info("Access Token 조회");
+            String accessToken = jwtToken.getAccessTokenFromRequest(request)
+                    .filter(jwtToken::isValidToken)
+                    .orElse(null);
+            String email = jwtToken.getPayloadEmail(accessToken);
 
-        if (accessToken != null && jwtToken.isValidToken(accessToken)) { // Access Token 유효성 검사
-            setAuthentication(email);
-        } else if (refreshTokenRepository.existByEmail(email)) { // Redis 에 Refresh Token 유효하면 Cookie 에 Access 재발급
-            cookieUtil.generateCookie(response, jwtToken.generateAccessToken(email));
-            setAuthentication(email);
-        }else {
+            if (accessToken != null) { // Access Token 유효성 검사
+                setAuthentication(email);
+            } else if (refreshTokenRepository.existByEmail(email)) { // Redis 에 Refresh Token 유효하면 Cookie 에 Access 재발급
+                cookieUtil.generateCookie(response, jwtToken.generateAccessToken(email));
+                setAuthentication(email);
+            }
+        } catch (CustomException e) {
             throw new CustomException(LOGIN_FAIL);
         }
 
