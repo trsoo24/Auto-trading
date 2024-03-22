@@ -2,10 +2,12 @@ package com.project.configuration.security;
 
 import com.project.configuration.redis.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
@@ -28,12 +30,24 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .sessionManagement((sessionManagement) -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-                        .requestMatchers("/user/join", "/user/login", "/coin/**", "/ticker").permitAll()
-                        .requestMatchers("/admin/**").hasRole("Admin")
+                        .requestMatchers("/", "/user/join", "/user/login", "/coin/**", "/ticker").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .addFilterBefore(new CustomFilter(customUserDetailsService, jwtToken, refreshTokenRepository, cookieUtil), UsernamePasswordAuthenticationFilter.class)
         ;
 
         return http.build();
+    }
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return web -> web.ignoring()
+                .requestMatchers("/", "/user/join", "/user/login", "/coin/list", "/coin/fee", "/ticker");
+    }
+
+    @Bean
+    public FilterRegistrationBean<CustomFilter> registration(CustomFilter filter) {
+        FilterRegistrationBean<CustomFilter> registration = new FilterRegistrationBean<>(filter);
+        registration.setEnabled(false);
+        return registration;
     }
 }
