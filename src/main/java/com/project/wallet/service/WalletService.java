@@ -18,7 +18,7 @@ public class WalletService {
     private final CheckWalletReference checkWalletReference;
     private final CheckUserReference checkUserReference;
 
-    public void generateWallet(User user) { // TODO 성능 체크
+    public Wallet generateWallet(User user) { // TODO 성능 체크
         Wallet wallet = Wallet.builder()
                 .user(user)
                 .coinList(new ArrayList<>())
@@ -27,6 +27,7 @@ public class WalletService {
 
         walletRepository.save(wallet);
         user.setWallet(wallet);
+        return wallet;
     }
 
     public double getBalance(HttpServletRequest request) { // 잔액 조회
