@@ -14,16 +14,13 @@ import java.util.Collection;
 @Getter
 @RequiredArgsConstructor
 public class CustomUserDetail implements UserDetails {
-    private final User user;
     private final String username;
     private final String password;
+    private final Role role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Role role = user.getRole();
-        String type = role.getType();
-
-        SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(type);
+        SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(role.getType());
         Collection<GrantedAuthority> authorities = new ArrayList<>();
 
         authorities.add(simpleGrantedAuthority);
