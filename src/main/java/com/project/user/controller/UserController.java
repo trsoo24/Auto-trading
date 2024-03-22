@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
     private final UserService userService;
     @PostMapping("/join")
-    public ResponseEntity<String> signUp (@RequestBody @Valid SignUpDto sign) {
+    public ResponseEntity<User> signUp (@RequestBody @Valid SignUpDto sign) {
         return ResponseEntity.ok(userService.signUp(sign));
     }
 
