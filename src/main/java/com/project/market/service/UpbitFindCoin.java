@@ -110,8 +110,8 @@ public class UpbitFindCoin {
 
                 marketRepository.save(market);
             } catch (IOException e) {
-            }
                 throw new RuntimeException();
+            }
         }
     }
 }
