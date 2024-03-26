@@ -22,11 +22,10 @@ public class JwtToken {
     private String jwtKey;
     private final String ACCESS_TOKEN = "AccessToken";
     private final String REFRESH_TOKEN = "RefreshToken";
-    private final Long ACCESS_TOKEN_EXPIRATION_PERIOD = 1000L * 60 * 60 * 6;
+    private final Long ACCESS_TOKEN_EXPIRATION_PERIOD = 1000L * 60 * 60;
     private final Long REFRESH_TOKEN_EXPIRATION_PERIOD = 1000L * 60 * 60 * 24 * 2;
     private final String BEARER = "Bearer ";
     private final String ACCESS_HEADER = "Authorization";
-    private final String REFRESH_HEADER = "Refresh";
     private final String EMAIL = "email";
     private final RefreshTokenRepository refreshTokenRepository;
 
