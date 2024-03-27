@@ -16,7 +16,6 @@ public class RefreshToken {
     @Id
     private String id;
     @Indexed
-    private String email;
     private String refreshToken;
     @TimeToLive
     private Long expiration;

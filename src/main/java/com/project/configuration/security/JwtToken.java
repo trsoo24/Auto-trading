@@ -50,7 +50,7 @@ public class JwtToken {
                 .sign(Algorithm.HMAC256(jwtKey));
 
         refreshTokenRepository.save(RefreshToken.builder()
-                .email(email)
+                .id(email)
                 .refreshToken(token)
                 .expiration(REFRESH_TOKEN_EXPIRATION_PERIOD)
                 .build());
