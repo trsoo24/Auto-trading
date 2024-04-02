@@ -22,7 +22,7 @@ public class TradeRecordService {
                                 double volume, double price) {
 
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime tradeTime = LocalDateTime.parse(LocalDateTime.now().format(timeFormatter));
+        String tradeTime = LocalDateTime.now().format(timeFormatter);
 
         TradeRecord tradeRecord = makeDocument(email, tradeType, coinName, volume, price, tradeTime);
 
@@ -30,7 +30,7 @@ public class TradeRecordService {
     }
 
     public TradeRecord makeDocument(String email, TradeType tradeType, String coinName,
-                                    double volume, double price, LocalDateTime tradeTimeStamp) {
+                                    double volume, double price, String tradeTimeStamp) {
         return TradeRecord.builder()
                 .email(email)
                 .tradeType(tradeType)

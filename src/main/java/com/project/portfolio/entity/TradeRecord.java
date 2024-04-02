@@ -22,6 +22,5 @@ public class TradeRecord {
     private String coinName;
     private double volume;
     private double price;
-    private LocalDateTime tradeTimeStamp;
-
+    private String tradeTimeStamp;
 }
