@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.project.exception.ErrorCode.NOT_ENOUGH_CASH;
@@ -65,6 +66,7 @@ public class PortfolioService {
                     .price(price)
                     .volume(tradeCurrencyDto.getVolume())
                     .averageValue(price / tradeCurrencyDto.getVolume())
+                    .lastTradeTimeStamp(LocalDateTime.now())
                     .build();
 
             portfolioRepository.save(portfolio);
