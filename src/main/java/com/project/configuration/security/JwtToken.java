@@ -2,6 +2,8 @@ package com.project.configuration.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.project.configuration.redis.RefreshToken;
 import com.project.configuration.redis.RefreshTokenRepository;
 import com.project.exception.CustomException;
@@ -31,6 +33,7 @@ public class JwtToken {
 
     public String generateAccessToken(String email) { // accessToken 생성
         Date date = new Date();
+
         return JWT.create()
                 .withSubject(ACCESS_TOKEN)
                 .withExpiresAt(new Date(date.getTime() + ACCESS_TOKEN_EXPIRATION_PERIOD))
@@ -69,15 +72,22 @@ public class JwtToken {
 
     public Optional<String> getAccessTokenFromRequest(HttpServletRequest request) { // Request Header 토큰 추출
         return Optional.ofNullable(request.getHeader(ACCESS_HEADER))
-                .filter(refreshToken -> refreshToken.startsWith(BEARER))
-                .map(refreshToken -> refreshToken.replace(BEARER, ""));
+                .filter(accessToken -> accessToken.startsWith(BEARER))
+                .map(accessToken -> accessToken.replace(BEARER, ""));
     }
 
     public boolean isValidToken(String token) {
-        return JWT.require(Algorithm.HMAC256(jwtKey))
-                .build()
-                .verify(token)
-                .getExpiresAt()
-                .before(new Date());
+        try {
+            return toDecodedJwtToken(token).getExpiresAt().after(new Date());
+        } catch (TokenExpiredException e) {
+            return false; // 토큰이 만료된 경우
+        } catch (Exception e) {
+            return false; // 다른 예외도 우선 false 처리
+        }
     }
+
+    public DecodedJWT toDecodedJwtToken(String encodedToken) {
+        return JWT.require(Algorithm.HMAC256(jwtKey)).build().verify(encodedToken);
+    }
+
 }
