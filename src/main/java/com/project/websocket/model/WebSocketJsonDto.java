@@ -12,12 +12,12 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class JsonDto {
+public class WebSocketJsonDto {
     private String type;
     private List<String> codes;
 
-    public JsonDto searchMarketTicker(List<String> marketNameList) {
-        return JsonDto.builder()
+    public WebSocketJsonDto searchMarketTicker(List<String> marketNameList) {
+        return WebSocketJsonDto.builder()
                 .type(TypeInJson.TICKER.getType())
                 .codes(marketNameList)
                 .build();
