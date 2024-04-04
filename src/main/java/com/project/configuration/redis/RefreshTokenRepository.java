@@ -2,9 +2,9 @@ package com.project.configuration.redis;
 
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.Optional;
+
 
 public interface RefreshTokenRepository extends CrudRepository<RefreshToken, String> {
-    RefreshToken findByEmail(String email);
-    Boolean existByEmail(String email);
-    RefreshToken findByRefreshToken(String refreshToken);
+    Optional<RefreshToken> findById(String id);
 }

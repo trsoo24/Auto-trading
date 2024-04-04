@@ -35,7 +35,7 @@ public class CustomFilter extends OncePerRequestFilter {
             return;
         }
 
-        if (request.getRequestURI().equals("/coin/list") || request.getRequestURI().equals("/coin/fee")) { // 마켓 검색 제외
+        if (request.getRequestURI().equals("/coin/list") || request.getRequestURI().equals("/coin/fee") || request.getRequestURI().equals("/ticker")) { // 마켓 검색 제외
             log.info("업비트 코인 마켓 조회 API로 필터링 제외");
             filterChain.doFilter(request, response);
             return;
@@ -50,7 +50,8 @@ public class CustomFilter extends OncePerRequestFilter {
 
             if (accessToken != null) { // Access Token 유효성 검사
                 setAuthentication(email);
-            } else if (refreshTokenRepository.existByEmail(email)) { // Redis 에 Refresh Token 유효하면 Cookie 에 Access 재발급
+            } else if (refreshTokenRepository.findById(email).isPresent()) { // Redis 에 Refresh Token 유효하면 Cookie 에 Access 재발급
+                log.info("Access Token 만료");
                 cookieUtil.generateCookie(response, jwtToken.generateAccessToken(email));
                 setAuthentication(email);
             }
