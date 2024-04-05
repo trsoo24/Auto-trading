@@ -75,6 +75,9 @@ public class PortfolioService {
         tradeRecordService.saveTradeRecord(email, TradeType.BUY, tradeCurrencyDto.getMarketName(),
                 tradeCurrencyDto.getVolume(), ticker.getTradePrice()); // 거래 기록 저장
 
+        wallet.useBalance(price);
+        walletRepository.save(wallet);
+
         return ticker.getTradePrice() + " 원에 " + tradeCurrencyDto.getVolume() + " 개 구매 완료";
     }
 

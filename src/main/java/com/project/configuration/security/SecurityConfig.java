@@ -38,16 +38,4 @@ public class SecurityConfig {
 
         return http.build();
     }
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return web -> web.ignoring()
-                .requestMatchers("/", "/user/join", "/user/login", "/coin/list", "/coin/fee", "/ticker");
-    }
-
-    @Bean
-    public FilterRegistrationBean<CustomFilter> registration(CustomFilter filter) {
-        FilterRegistrationBean<CustomFilter> registration = new FilterRegistrationBean<>(filter);
-        registration.setEnabled(false);
-        return registration;
-    }
 }

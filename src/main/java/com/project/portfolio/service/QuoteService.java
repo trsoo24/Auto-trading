@@ -35,7 +35,7 @@ public class QuoteService { // 포트폴리오 전체 시세 조회
             sb.append(portfolio.getMarketName());
             sb.append(",");
         }
-        List<Ticker> tickerList = tickerService.searchCoinTicker(tickerService.parseMarketNameList(sb.toString()));
+        List<Ticker> tickerList = tickerService.searchCoinTicker(sb.toString());
 
         HashMap<String , Double> marketValueMap = filterQuote(tickerList);
 
