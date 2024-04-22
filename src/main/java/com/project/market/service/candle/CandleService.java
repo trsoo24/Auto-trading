@@ -31,7 +31,7 @@ public class CandleService {
     private static final String URL = "https://api.upbit.com/v1/candles/";
     private static final String[][] PERIOD_ARRAY = {{"days", "일"}, {"weeks", "주"}, {"months", "월"}};
 
-    public List<Candle> searchCandle(String requestUrl) {
+    private List<Candle> searchCandle(String requestUrl) {
         List<Candle> candleList = new ArrayList<>();
 
         OkHttpClient client = new OkHttpClient();
@@ -83,7 +83,7 @@ public class CandleService {
         return candleList;
     }
 
-    private List<Candle> generateCandleUrl (CandleDto dto) {
+    public List<Candle> generateCandleUrl (CandleDto dto) {
         String market = checkMarketReference.findByCoinName(dto.getMarketName()).getMarket();
         String period = dividePeriod(dto.getPeriod());
         String toDate = transDateToString.transDate(dto.getToDate());
@@ -91,21 +91,21 @@ public class CandleService {
         return searchCandle(URL + period + "?market=" + market + "&to=" + toDate + "&count=" + dto.getCount());
     }
 
-    private List<Candle> generateCandleUrl (CandleToNowDto dto) {
+    public List<Candle> generateCandleUrl (CandleToNowDto dto) {
         String market = checkMarketReference.findByCoinName(dto.getMarketName()).getMarket();
         String period = dividePeriod(dto.getPeriod());
 
         return searchCandle(URL + period + "?market=" + market + "&count=" + dto.getCount());
     }
 
-    private List<Candle> generateMinuteCandleUrl (MinuteCandleDto dto) {
+    public List<Candle> generateMinuteCandleUrl (MinuteCandleDto dto) {
         String market = checkMarketReference.findByCoinName(dto.getMarketName()).getMarket();
         String toDate = transDateToString.transDate(dto.getToDate());
 
         return searchCandle(URL + "minute" + dto.getPeriod() + "?market=" + market + "&to=" + toDate + "&count=" + dto.getCount());
     }
 
-    private List<Candle> generateMinuteCandleUrl (MinuteCandleToNowDto dto) {
+    public List<Candle> generateMinuteCandleUrl (MinuteCandleToNowDto dto) {
         String market = checkMarketReference.findByCoinName(dto.getMarketName()).getMarket();
 
         return searchCandle(URL + "minute" + dto.getPeriod() + "?market=" + market + "&count=" + dto.getCount());
