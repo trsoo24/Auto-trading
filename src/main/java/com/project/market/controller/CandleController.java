@@ -27,7 +27,7 @@ public class CandleController {
         return ResponseEntity.ok(candleService.generateCandleUrl(dto));
     }
 
-    @GetMapping
+    @GetMapping("/now")
     public ResponseEntity<List<Candle>> getCandle(@RequestBody @Valid CandleToNowDto dto) {
         return ResponseEntity.ok(candleService.generateCandleUrl(dto));
     }
@@ -37,7 +37,7 @@ public class CandleController {
         return ResponseEntity.ok(candleService.generateMinuteCandleUrl(dto));
     }
 
-    @GetMapping("/minute")
+    @GetMapping("/minute/now")
     public ResponseEntity<List<Candle>> getMinuteCandle(@RequestBody @Valid MinuteCandleToNowDto dto) {
         return ResponseEntity.ok(candleService.generateMinuteCandleUrl(dto));
     }
